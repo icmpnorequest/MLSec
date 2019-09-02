@@ -154,6 +154,8 @@ def GenerateTrainSet(num_synth, data, target, target_model, k_max):
     gen_data = np.zeros((n_record, n_features))
     gen_label = np.zeros((n_record, 1))
 
+    all_zeros = np.zeros((1, n_features))
+
     cls = 0
     step = 0
     for i in range(n_record):
@@ -164,7 +166,19 @@ def GenerateTrainSet(num_synth, data, target, target_model, k_max):
         print("cls = ", cls)
         gen_label[i] = uniq_target[step]
 
-        x = Synthesize(data=data, target_model=target_model, fixed_class=cls, k_max=k_max)
+        try:
+            while True:
+                x = Synthesize(data=data, target_model=target_model, fixed_class=cls, k_max=k_max)
+                if x.all() == all_zeros.all():
+                    print("x = ", x)
+                    print("Repeat generating x!\n")
+                    continue
+                else:
+                    print("x = ", x)
+                    break
+        except Exception as e:
+            print(e)
+
         gen_data[i] = x
         print("gen_data[{}] = {}".format(i, gen_data[i]))
         print("gen_label[{}] = {}".format(i, gen_label[i]))
@@ -182,6 +196,32 @@ def Save2CSV(gen_array, filename):
     """
     df = pd.DataFrame(data=gen_array)
     df.to_csv(filename, index_label=False, index=False)
+
+
+def FormatCSV(filename, data, target_model, k_max):
+    """
+    It is a function to format csv file.
+    :param filename:
+    :param data:
+    :param target_model:
+    :param k_max:
+    :return:
+    """
+    df = pd.read_csv(filename)
+    cls = 0
+
+    for i in range(len(df)):
+        if df.iloc[i, :13].all() == 0.0:
+            cls = int(df.iloc[i, 13])
+            print("i = ", i)
+            x = Synthesize(data=data, target_model=target_model, fixed_class=cls, k_max=k_max)
+            while x is False:
+                x = Synthesize(data=data, target_model=target_model, fixed_class=cls, k_max=k_max)
+            print("x = ", x)
+            df.iloc[i, :13] = x
+            print("df.iloc[{}] = \n{}".format(i, df.iloc[i]))
+            print("######################################\n")
+    df.to_csv(filename)
 
 
 if __name__ == '__main__':
@@ -234,3 +274,7 @@ if __name__ == '__main__':
 
     ####################### Save to CSV ###################
     Save2CSV(gen_array, filename)
+
+
+    #################### Format CSV #################
+    FormatCSV(filename, data=data_std, target_model=rf, k_max=3)
