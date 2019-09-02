@@ -211,14 +211,14 @@ def FormatCSV(filename, data, target_model, k_max):
     cls = 0
 
     for i in range(len(df)):
-        if df.iloc[i, :13].all() == 0.0:
-            cls = int(df.iloc[i, 13])
+        if df.iloc[i, :-1].all() == 0.0:
+            cls = int(df.iloc[i, -1])
             print("i = ", i)
             x = Synthesize(data=data, target_model=target_model, fixed_class=cls, k_max=k_max)
             while x is False:
                 x = Synthesize(data=data, target_model=target_model, fixed_class=cls, k_max=k_max)
             print("x = ", x)
-            df.iloc[i, :13] = x
+            df.iloc[i, :-1] = x
             print("df.iloc[{}] = \n{}".format(i, df.iloc[i]))
             print("######################################\n")
     df.to_csv(filename)
