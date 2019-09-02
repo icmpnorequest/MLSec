@@ -16,6 +16,15 @@ from sklearn.ensemble import RandomForestClassifier
 
 np.set_printoptions(threshold=np.inf)
 
+pd.set_option('display.max_columns', 10000)
+pd.set_option('display.max_rows', 10000)
+pd.set_option('display.max_colwidth', 10000)
+pd.set_option('display.width',1000)
+
+filename = "../Membership_Inference/synthetic_data.csv"
+# Membership_Inference
+
+
 '''
 ############### REFERENCE CODE by BielStela ####################
 link: https://github.com/BielStela/membership_inference/blob/master/mblearn/data_synthesis.py
@@ -125,21 +134,82 @@ def Synthesize(data, target_model, fixed_class, k_max):
     return False
 
 
+def GenerateTrainSet(num_synth, data, target, target_model, k_max):
+    """
+    It is a function to generate training dataset for shadow models using synthetic data
+    :param num_synth: number of synthetic data for each class in target
+    :param data: original scaled training dataset
+    :param target: original target
+    :param target_model: target model
+    :param num_class: number of classes in target
+    :param k_max: max value of k
+    :return: <np.ndarray> training dataset for shadow models
+    """
+    num_class = target_model.n_classes_
+    n_record = num_synth * num_class
+    n_features = data.shape[1]
+    uniq_target = np.unique(target)
+    # Initialize res <np.ndarray> with [n_record, n_features]
+
+    gen_data = np.zeros((n_record, n_features))
+    gen_label = np.zeros((n_record, 1))
+
+    cls = 0
+    step = 0
+    for i in range(n_record):
+        print("i = ", i)
+        step = i // num_synth
+        print("step = ", step)
+        cls = uniq_target[step]
+        print("cls = ", cls)
+        gen_label[i] = uniq_target[step]
+
+        x = Synthesize(data=data, target_model=target_model, fixed_class=cls, k_max=k_max)
+        gen_data[i] = x
+        print("gen_data[{}] = {}".format(i, gen_data[i]))
+        print("gen_label[{}] = {}".format(i, gen_label[i]))
+        print("############################\n")
+
+    return np.hstack((gen_data, gen_label))
+
+
+def Save2CSV(gen_array, filename):
+    """
+    It is a function to save generated array to csv
+    :param gen_array: generate array of GenerateTrainSet
+    :param filename: filename of file to be saved
+    :return: csv file
+    """
+    df = pd.DataFrame(data=gen_array)
+    df.to_csv(filename, index_label=False, index=False)
+
+
 if __name__ == '__main__':
 
-    ################# Load Data and Classifier #################
+    ################# Load Data and Classifier ##############
     data, target = load_wine(return_X_y=True)
     # data.shape = (178, 13)
 
-    # Regularization
+    # Count how many types of classes are in target
+    n_classes = len(np.unique(target))
+    print("n_classes = ", n_classes)
+
+    # Count how many features are in data
+    n_features = data.shape[1]
+    print("n_features = ", n_features)
+
+
+    ##################### Regularization ####################
     scaler = MinMaxScaler()
     data_std = scaler.fit_transform(data)
 
-    # Create a classifier
+
+    ################### Create a classifier #################
     rf = RandomForestClassifier(n_estimators=100)
     rf.fit(data_std, target)
 
-    ###################### Synthesize ########################
+
+    ###################### Synthesize #######################
     # Generate k modified feature vector
     x = RandRecord(data_std, k=0)
     print("x = ", x)
@@ -150,3 +220,17 @@ if __name__ == '__main__':
 
     x_synth = Synthesize(data_std, rf, fixed_class, k_max=3)
     print("x_synth = ", x_synth)
+    print("x_synth.shape = ", x_synth.shape)
+    # (1, 13)
+    print('####################################\n')
+
+
+    ############### Generate Training dataset ##############
+    gen_array = GenerateTrainSet(num_synth=100, data=data_std, target=target, target_model=rf, k_max=3)
+    # print("gen_array = ", gen_array)
+    print("gen_array.shape = ", gen_array.shape)
+    print("####################################\n")
+
+
+    ####################### Save to CSV ###################
+    Save2CSV(gen_array, filename)
