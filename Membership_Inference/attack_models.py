@@ -54,7 +54,7 @@ def SplitClassData(filename):
 if __name__ == '__main__':
 
     #################### Split class label ###################
-    attack_by_labels = SplitClassData(attack_file, 3, 5)        # <List> object
+    attack_by_labels = SplitClassData(attack_file)        # <List> object
 
     ##################### Train and Predict ##################
     for item in attack_by_labels:
