@@ -67,7 +67,7 @@ class CNN_CIFAR10(nn.Module):
     def forward(self, x):
         output = self.convnet(x)
         output = output.view(output.size[0], -1)
-        output= self.fc(output)
+        output = self.fc(output)
 
         return output
 

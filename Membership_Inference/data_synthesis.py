@@ -14,6 +14,8 @@ from sklearn.datasets import load_wine
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.ensemble import RandomForestClassifier
 
+from Membership_Inference.nn_model import CNN_CIFAR10
+
 np.set_printoptions(threshold=np.inf)
 
 pd.set_option('display.max_columns', 10000)
@@ -244,15 +246,20 @@ if __name__ == '__main__':
     data_std = scaler.fit_transform(data)
 
 
-    ################### Create a classifier #################
+    ########### Create a RandomForest classifier ###########
     rf = RandomForestClassifier(n_estimators=100)
     rf.fit(data_std, target)
+
+
+    ######### Create a CNN classifier on CIFAR-10 ##########
+    cnn_cifar10 = CNN_CIFAR10()
 
 
     ###################### Synthesize #######################
     # Generate k modified feature vector
     x = RandRecord(data_std, k=0)
     print("x = ", x)
+    print("type(x) = ", type(x))
     print("\n")
 
     # class we want the record to belong to
