@@ -244,6 +244,8 @@ if __name__ == '__main__':
     ##################### Regularization ####################
     scaler = MinMaxScaler()
     data_std = scaler.fit_transform(data)
+    print("data_std.shape = ", data_std.shape)
+    # (178, 13)
 
 
     ########### Create a RandomForest classifier ###########
