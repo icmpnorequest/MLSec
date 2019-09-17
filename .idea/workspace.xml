@@ -3,9 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="5bf8da9b-a531-46dd-88cc-04f8c077c762" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Membership_Inference/attack_data.npy" beforeDir="false" afterPath="$PROJECT_DIR$/Membership_Inference/attack_data.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Membership_Inference/attack_split_labels_data.npy" beforeDir="false" afterPath="$PROJECT_DIR$/Membership_Inference/attack_split_labels_data.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Membership_Inference/data_synthesis.py" beforeDir="false" afterPath="$PROJECT_DIR$/Membership_Inference/data_synthesis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Membership_Inference/Experiment_CIFAR10.py" beforeDir="false" afterPath="$PROJECT_DIR$/Membership_Inference/Experiment_CIFAR10.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Membership_Inference/nn_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/Membership_Inference/nn_model.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,8 +17,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Membership_Inference/data_synthesis.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="535">
-              <caret line="247" column="15" lean-forward="true" selection-start-line="247" selection-start-column="15" selection-end-line="247" selection-end-column="15" />
+            <state relative-caret-position="5940">
+              <caret line="278" column="38" selection-start-line="278" selection-start-column="38" selection-end-line="278" selection-end-column="38" />
               <folding>
                 <element signature="e#263#281#0" expanded="true" />
               </folding>
@@ -27,11 +26,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Membership_Inference/nn_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-449">
-              <caret line="23" column="25" lean-forward="true" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="25" />
+            <state relative-caret-position="-361">
+              <caret line="83" column="7" lean-forward="true" selection-start-line="75" selection-start-column="4" selection-end-line="83" selection-end-column="7" />
+              <folding>
+                <element signature="e#235#253#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Membership_Inference/Experiment_CIFAR10.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="261">
+              <caret line="178" lean-forward="true" selection-start-line="178" selection-end-line="178" />
               <folding>
                 <element signature="e#235#253#0" expanded="true" />
               </folding>
@@ -62,14 +73,14 @@
         <option value="$PROJECT_DIR$/Membership_Inference/test.py" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/Membership_Inference/attack_models.py" />
-        <option value="$PROJECT_DIR$/Membership_Inference/nn_model.py" />
         <option value="$PROJECT_DIR$/Membership_Inference/load_dataset.py" />
-        <option value="$PROJECT_DIR$/Membership_Inference/Experiment_CIFAR10.py" />
         <option value="$PROJECT_DIR$/Membership_Inference/data_synthesis.py" />
+        <option value="$PROJECT_DIR$/Membership_Inference/nn_model.py" />
+        <option value="$PROJECT_DIR$/Membership_Inference/Experiment_CIFAR10.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
+  <component name="ProjectFrameBounds" fullScreen="true">
     <option name="width" value="1920" />
     <option name="height" value="1080" />
   </component>
@@ -78,7 +89,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -94,12 +104,25 @@
             <path>
               <item name="MLSec" type="b2602c69:ProjectViewProjectNode" />
               <item name="MLSec" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="cifar10_batch_data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MLSec" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MLSec" type="462c0819:PsiDirectoryNode" />
               <item name="Membership_Inference" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MLSec" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MLSec" type="462c0819:PsiDirectoryNode" />
+              <item name="Membership_Inference" type="462c0819:PsiDirectoryNode" />
+              <item name="cifar10" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -118,7 +141,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.attack_models">
+  <component name="RunManager" selected="Python.Experiment_CIFAR10">
     <configuration name="Experiment_CIFAR10" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="MLSec" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -226,10 +249,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Experiment_CIFAR10" />
         <item itemvalue="Python.attack_models" />
         <item itemvalue="Python.data_synthesis" />
         <item itemvalue="Python.shadow_models" />
-        <item itemvalue="Python.Experiment_CIFAR10" />
         <item itemvalue="Python.nn_model" />
       </list>
     </recent_temporary>
@@ -257,20 +280,20 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="6" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23396759" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23396759" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.6084337" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.8385542" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32970297" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32970297" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32891566" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32970297" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.32970297" />
@@ -294,9 +317,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Membership_Inference/attack_split_labels_data.npy">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -318,25 +338,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Membership_Inference/attack_data.npy">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/Membership_Inference/shadow_models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1854">
           <caret line="152" lean-forward="true" selection-start-line="152" selection-end-line="152" />
           <folding>
             <element signature="e#227#245#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Membership_Inference/Experiment_CIFAR10.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1053">
-          <caret line="90" lean-forward="true" selection-start-line="90" selection-end-line="90" />
-          <folding>
-            <element signature="e#235#253#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -351,10 +358,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Membership_Inference/attack_data.npy">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Membership_Inference/attack_split_labels_data.npy">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/Membership_Inference/data_synthesis.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="535">
-          <caret line="247" column="15" lean-forward="true" selection-start-line="247" selection-start-column="15" selection-end-line="247" selection-end-column="15" />
+        <state relative-caret-position="5940">
+          <caret line="278" column="38" selection-start-line="278" selection-start-column="38" selection-end-line="278" selection-end-column="38" />
           <folding>
             <element signature="e#263#281#0" expanded="true" />
           </folding>
@@ -363,8 +376,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Membership_Inference/nn_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-449">
-          <caret line="23" column="25" lean-forward="true" selection-start-line="23" selection-start-column="25" selection-end-line="23" selection-end-column="25" />
+        <state relative-caret-position="-361">
+          <caret line="83" column="7" lean-forward="true" selection-start-line="75" selection-start-column="4" selection-end-line="83" selection-end-column="7" />
+          <folding>
+            <element signature="e#235#253#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/torch/distributions/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="157">
+          <caret line="79" selection-start-line="79" selection-end-line="79" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Membership_Inference/Experiment_CIFAR10.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="178" lean-forward="true" selection-start-line="178" selection-end-line="178" />
           <folding>
             <element signature="e#235#253#0" expanded="true" />
           </folding>

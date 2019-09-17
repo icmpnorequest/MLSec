@@ -14,6 +14,11 @@ import torchvision
 import torchvision.transforms as transforms
 import torch.nn.functional as F
 import torch.nn as nn
+from torch.utils.data import TensorDataset
+from torch.utils.data import DataLoader
+import torch.optim as optim
+
+from Membership_Inference.nn_model import *
 
 
 # Dataset path
@@ -25,6 +30,10 @@ num_epochs = 5
 batch_size = 100
 learning_rate = 0.001
 num_workers = 2
+
+
+# Device configuaration
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 def new_size_conv(size, kernel, stride=1, padding=0):
@@ -87,4 +96,151 @@ def cifar10_loader(data_path, batch_size, num_workers):
     return train_loader, test_loader
 
 
-train_loader, test_loader = cifar10_loader(dataset_path, batch_size, num_workers)
+# train_loader, test_loader = cifar10_loader(dataset_path, batch_size, num_workers)
+
+def rm_array_comma(len, ndarray):
+    """
+    It is a function to remove comma in an array
+    :param ndarray: np.ndarray
+    :return: array without comma
+    """
+    for _ in range(len):
+        for i in ndarray:
+            if "," in i:
+                i = i.replace(",", "")
+    return ndarray
+
+
+
+
+
+def ndarray_to_tensor(ndarray):
+    """
+    It is a function to transform <np.ndarray> to <tensor>
+    :param ndarray: np.ndarray
+    :return: tensor object
+    """
+    out = torch.from_numpy(ndarray)
+    return out
+
+
+def form_dataset(X_tensor, y_tensor):
+    """
+    It is a function to form dataset.
+    :param X_tensor: tensor x
+    :param y_tensor: tensor y
+    :return: dataset
+    """
+    dataset = TensorDataset(X_tensor, y_tensor)
+    return dataset
+
+
+def form_dataloader(tensor_dataset, batch_size, num_workers):
+    """
+    It is a function to form data loader from tensor dataset.
+    :param tensor_dataset: tensor dataset
+    :return: data loader
+    """
+    data_loader = DataLoader(tensor_dataset, batch_size=batch_size, num_workers=num_workers, shuffle=True)
+    return data_loader
+
+
+def train_target_model(ndarray_path, trainset_size, net, num_epochs, criterion, optimizer, device):
+    """
+    It is a function to train the target model
+    :param net: neural network
+    :param train_loader: train data loader
+    :param num_epochs: number of epochs
+    :param criterion: loss function
+    :param optimizer: optimizer
+    :param device: device (cuda or cpu)
+    """
+    # 1. Load norm_all_batch_data array
+    norm_all_data_array = (np.load(ndarray_path, allow_pickle=True))    # (5, 10000, 3)
+    concatenate_norm_array = np.concatenate((norm_all_data_array))      # (50000, 3)
+
+    # 2. Extract train set array
+    trainset_array = concatenate_norm_array[:trainset_size, :]      # (trainset_size, 3)
+    # print(trainset_array)
+
+    X = trainset_array[:, 0]            # Data, shape = (trainset_size, )
+    y = trainset_array[:, 1]            # Label, shape = (trainset_size, )
+
+
+    test = X
+
+
+    # test1 = rm_array_comma(len(test), test)
+
+
+
+    test1 = np.frompyfunc(lambda x: x.replace(',', ''), 1, 1)(test).astype(float)
+    print(test1)
+
+
+    # test1 = torch.Tensor(list(test.values))
+
+    # print(test1)
+
+
+    # print(X)
+    # test = np.array([v.replace(',', '') for v in X], dtype=np.float32)
+    # print(test.dtype)
+
+    # test = np.core.defchararray.replace(X.astype(np.unicode_), ',', '').astype(np.float)
+    # print(test)
+
+    # 3. ndarray -> tensor
+    # X_tensor = ndarray_to_tensor(ndarray=X)
+    # y_tensor = ndarray_to_tensor(ndarray=y)
+
+    # X_tensor = torch.from_numpy(test).to(float)
+
+
+    # print(X_tensor)
+    print("\n")
+    # print(y_tensor)
+    """
+    # 4. tensor -> dataset
+    target_train_dataset = form_dataset(X_tensor=X_tensor, y_tensor=y_tensor)
+
+    # 5. dataset -> data loader
+    target_train_loader = form_dataloader(tensor_dataset=target_train_dataset,
+                                          batch_size=batch_size,
+                                          num_workers=num_workers)
+
+    # 6. train
+    train(net=net,
+          train_loader=target_train_loader,
+          num_epochs=num_epochs,
+          criterion=criterion,
+          optimizer=optimizer,
+          device=device)
+    """
+
+
+
+def main():
+
+    # 1. Define target neural network
+    target_net = CNN_CIFAR10()
+
+    # 2. Define loss function
+    criterion = nn.CrossEntropyLoss()
+
+    # 3. Define optimizer
+    optimizer = optim.Adam(target_net.parameters(), lr=learning_rate)
+
+    # 4. Train target model
+    train_target_model(ndarray_path="cifar10/norm_all_batch_data.npy",
+                       trainset_size=2500,
+                       net=target_net,
+                       num_epochs=num_epochs,
+                       criterion=criterion,
+                       optimizer=optimizer,
+                       device=device)
+
+
+if __name__ == '__main__':
+
+    main()

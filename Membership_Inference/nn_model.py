@@ -71,3 +71,60 @@ class CNN_CIFAR10(nn.Module):
 
         return output
 
+
+def train(net, train_loader, num_epochs, criterion, optimizer, device):
+    """
+    It is a function to train the NN model
+    :param net: neural network
+    :param train_loader: train data loader
+    :param num_epochs: number of epochs
+    :param criterion: loss function
+    :param optimizer: optimizer
+    :param device: device (cuda or cpu)
+    """
+    total_step = len(train_loader)
+    for epoch in range(num_epochs):
+        net.train()
+        for i, (images, labels) in enumerate(train_loader):
+            images = images.to(device)
+            labels = labels.to(device)
+
+            # Forward pass
+            output = net(images)
+            loss = criterion(output, labels)
+
+            # Backward and optimize
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+            if (i + 1) % 100 == 0:
+                print("Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}"
+                      .format(epoch + 1, num_epochs, i + 1, total_step, loss.item()))
+
+
+def test(net, test_loader, test_dataset, criterion, device):
+    """
+    It is a function to test the NN model
+    :param net: NN model
+    :param test_loader: test data loader
+    :param test_dataset: test dataset
+    :param criterion: loss function
+    :param device: device (cpu or cuda)
+    """
+    net.eval()
+    total_correct = 0
+    avg_loss = 0.0
+    for i, (images, labels) in enumerate(test_loader):
+        images = images.to(device)
+        labels = labels.to(device)
+
+        output = net(images)
+        avg_loss += criterion(output, labels)
+        # _, pred = torch.max(output.data, 1)
+        pred = torch.argmax(output.data, dim=1)
+        total_correct += (pred == labels).sum().item()
+
+    avg_loss = avg_loss / len(test_dataset)
+    print("Test Avg. Loss: {}, Accuracy: {}%"
+          .format(avg_loss, 100 * total_correct / len(test_dataset)))
