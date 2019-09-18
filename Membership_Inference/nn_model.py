@@ -98,9 +98,10 @@ def train(net, train_loader, num_epochs, criterion, optimizer, device):
             loss.backward()
             optimizer.step()
 
-            if (i + 1) % 5 == 0:
+            if (i + 1) % 10 == 0:
                 print("Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}"
                       .format(epoch + 1, num_epochs, i + 1, total_step, loss.item()))
+    print("\n")
 
 
 def test(net, test_loader, test_dataset, criterion, device):
@@ -121,10 +122,31 @@ def test(net, test_loader, test_dataset, criterion, device):
 
         output = net(images)
         avg_loss += criterion(output, labels)
-        # _, pred = torch.max(output.data, 1)
-        pred = torch.argmax(output.data, dim=1)
+        probability, pred = torch.max(output.data, dim=1)
+        # pred = torch.argmax(output.data, dim=1)
+        # print("Probability = ", probability)
+        # print("Probability.size() = ", probability.size())
         total_correct += (pred == labels).sum().item()
 
     avg_loss = avg_loss / len(test_dataset)
     print("Test Avg. Loss: {}, Accuracy: {}%"
           .format(avg_loss, 100 * total_correct / len(test_dataset)))
+
+
+def nn_predict_proba(net, test_loader, device):
+    """
+    It is a function to calculate probability.
+    :param net: neural network model
+    :param test_loader: test data loader
+    :param device: device (cpu or cuda)
+    :return: probability
+    """
+    net.eval()
+    for i, (images, labels) in enumerate(test_loader):
+        images = images.to(device)
+        labels = labels.to(device)
+
+        output = net(images)
+        probability, pred = torch.max(output.data, dim=1)
+
+    return probability
