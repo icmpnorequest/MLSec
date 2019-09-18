@@ -62,11 +62,11 @@ class CNN_CIFAR10(nn.Module):
 
             # FC2
             nn.Linear(in_features=128, out_features=10),
-            nn.Softmax())
+            nn.Softmax(dim=0))
 
     def forward(self, x):
         output = self.convnet(x)
-        output = output.view(output.size[0], -1)
+        output = output.view(x.size(0), -1)
         output = self.fc(output)
 
         return output
@@ -98,7 +98,7 @@ def train(net, train_loader, num_epochs, criterion, optimizer, device):
             loss.backward()
             optimizer.step()
 
-            if (i + 1) % 100 == 0:
+            if (i + 1) % 5 == 0:
                 print("Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}"
                       .format(epoch + 1, num_epochs, i + 1, total_step, loss.item()))
 
