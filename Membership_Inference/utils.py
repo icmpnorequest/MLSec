@@ -5,6 +5,7 @@
 @code description: It is a Python3 file to implement utils in Paper
 `Membership Inference Attack against Machine Learning Models` by Shokri et al. in 17 S&P
 """
+from typing import List, Any
 
 import torch
 import torchvision
@@ -15,6 +16,7 @@ from torch.utils.data import Subset
 import torchvision.transforms as transforms
 
 import numpy as np
+import os
 from skorch import NeuralNetClassifier
 
 from Membership_Inference.nn_model import *
@@ -283,3 +285,41 @@ def gen_class_tensor(trainset_size, fix_class):
     """
     y_tensor = torch.full(size=(trainset_size,), fill_value=fix_class)
     return y_tensor
+
+
+def load_shadowset_tensor(path):
+    """
+    It is a function to load shadowset tensors and return a combined one.
+    :param path: path of shadowset
+    :return: a combined tensor
+    """
+    X_tensor_list = []
+    for item in os.listdir(path):
+        X_tensor = torch.load(os.path.join(path, item)).squeeze()
+        X_tensor_list.append(X_tensor)
+
+    all_data_tensors = torch.cat(X_tensor_list, dim=0)
+    return all_data_tensors
+
+
+def gen_shadow_trainset(path, each_trainset_size, num_labels):
+    """
+    It is a function to generate shadow model training dataset
+    :param path: path of shadowset
+    :param trainset_size: size of train set
+    :return: the whole trainset
+    """
+    y_tensor_list = []
+    for cls in range(num_labels):
+        y_tensor = gen_class_tensor(trainset_size=each_trainset_size, fix_class=cls)
+        y_tensor_list.append(y_tensor)
+    all_label_tensors = torch.cat(y_tensor_list, dim=0)
+
+    # load all data tensors
+    all_data_tensors = load_shadowset_tensor(path=path)
+    # form Dataset
+    all_synthetic_dataset = TensorDataset(all_data_tensors, all_label_tensors)
+    # form DataLoader
+    all_synthetic_dataloader = DataLoader(dataset=all_synthetic_dataset)
+
+    return all_synthetic_dataset, all_synthetic_dataloader
