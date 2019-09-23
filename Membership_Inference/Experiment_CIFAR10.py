@@ -43,7 +43,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("-s", "--trainset_size", type=int, default=100, help="size of trainset (2500, 5000, 10000, 15000)")
+parser.add_argument("-s", "--trainset_size", type=int, default=250, help="size of trainset (2500, 5000, 10000, 15000)")
 parser.add_argument("-c", "--in_channels", type=int, default=3, help="number of in_channels")
 parser.add_argument("-im", "--image_size", type=int, default=32, help="size of image")
 
@@ -102,10 +102,13 @@ def data_synthesize(net, trainset_size, fix_class, initial_record, k_max,
     """
     # Initialize X_tensor with an initial_record, with size of (1, in_channels, img_size, img_size)
     X_tensor = initial_record
-    print("X_tensor.size() = ", X_tensor.size())
+    # print("X_tensor.size() = ", X_tensor.size())
+    # X_tensor.size() = torch.Size([1, 3, 32, 32])
+
     # Generate y_tensor with the size equivalent to X_tensor's
     y_tensor = gen_class_tensor(trainset_size, fix_class)
-    print("y_tensor.size() = ", y_tensor.size())
+    # print("y_tensor.size() = ", y_tensor.size())
+    # y_tensor.size() = torch.Size([1])
 
     y_c_current = 0         # target models probability of fixed class
     j = 0                   # consecutive rejections counter
@@ -151,12 +154,10 @@ def shadow_dataset(trainset_size, net, fix_class, initial_record, k_max, in_chan
     """
     trainset_list = []
     testset_list = []
-
     total_trainset_list = []
     total_testset_list = []
 
-
-    for i in range(trainset_size //  num_label):
+    for i in range(trainset_size // num_label):
         # Synthesize data
         X_tensor, y_c = data_synthesize(net=net,
                                         trainset_size=1,
@@ -168,9 +169,11 @@ def shadow_dataset(trainset_size, net, fix_class, initial_record, k_max, in_chan
                                         batch_size=batch_size,
                                         num_workers=num_workers,
                                         device=device)
+        print("X_tensor.size(0) = ", X_tensor.size(0))
+        # if X_tensor.size(0) ==
         trainset_list.append(X_tensor)
 
-    return torch.stack(trainset_list)
+    return torch.stack(trainset_list,)
 
 
 def main():
@@ -233,10 +236,11 @@ def main():
     # 1. Initialize a data record
     initial_record = torch.rand([1, args.in_channels, args.image_size, args.image_size])
 
-    # 2. Data Synthesis
+
+    # 2. Data Synthesis Example
     X_tensor, y_c = data_synthesize(net=target_net,
                                     trainset_size=1,
-                                    fix_class=8,
+                                    fix_class=9,
                                     initial_record=initial_record,
                                     k_max=8,
                                     in_channels=3,
@@ -244,20 +248,36 @@ def main():
                                     batch_size=batch_size,
                                     num_workers=num_workers,
                                     device=device)
-
+    print("########## Example ##########\n")
     print("X_tensor = ", X_tensor)
     print("X_tensor.size() = ", X_tensor.size())
     print("y_c = ", y_c)
 
+
     # 3. Get shadow model training set and testing set
+    num_labels = len(np.unique(y))
 
-    # shadow_training_set
+    for cls in range(num_labels - 1):
+        # shadow_training_set class label from 0-8
+        shadow_training_set = shadow_dataset(trainset_size=args.trainset_size,
+                                             net=target_net,
+                                             fix_class=cls,
+                                             initial_record=initial_record,
+                                             k_max=8,
+                                             in_channels=args.in_channels,
+                                             img_size=args.image_size,
+                                             batch_size=batch_size,
+                                             num_workers=num_workers,
+                                             device=device,
+                                             num_label=num_labels)
 
-    # trainset_size, net, fix_class, initial_record, k_max, in_channels,
-    #                    img_size, batch_size, num_workers, device
+        torch.save(shadow_training_set, "Shadowset_" + str(cls) + ".pt")
+        print("Save {} successfully!\n".format("Shadowset_" + str(9) + ".pt"))
+
+    # save shadow_training_set label 9
     shadow_training_set = shadow_dataset(trainset_size=args.trainset_size,
                                          net=target_net,
-                                         fix_class=7,
+                                         fix_class=10,
                                          initial_record=initial_record,
                                          k_max=8,
                                          in_channels=args.in_channels,
@@ -265,14 +285,14 @@ def main():
                                          batch_size=batch_size,
                                          num_workers=num_workers,
                                          device=device,
-                                         num_label=len(np.unique(y)))
+                                         num_label=num_labels)
 
-    print("len(shadow_training_set) = ", len(shadow_training_set))
-    print("shadow_training_set.size() = ", shadow_training_set.size())
+    torch.save(shadow_training_set, "Shadowset_" + str(9) + ".pt")
+
+
+
 
 
 if __name__ == '__main__':
-
-
 
     main()
