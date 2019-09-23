@@ -15,6 +15,13 @@ from torch.utils.data import Subset
 import torchvision.transforms as transforms
 
 import numpy as np
+from skorch import NeuralNetClassifier
+
+from Membership_Inference.nn_model import *
+
+
+# Device configuaration
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 def new_size_conv(size, kernel, stride=1, padding=0):
@@ -244,7 +251,35 @@ def result_recorder():
     Epoch [3/3], Step [90/100], Loss: 2.2682
     Epoch [3/3], Step [100/100], Loss: 2.2882
     """
-
     return None
 
 
+def rand_tensor(record, k, in_channels, img_size, trainset_size):
+    """
+    It is a function generate random tensor of specific size.
+    :param record: every line in X <torch.tensor>
+    :param k: number of features to be changed
+    :param trainset_size: size of training dataset
+    :return: generated x tensor
+    """
+    if k < 0:
+        raise ValueError("k < 0!")
+    else:
+        total_num = in_channels * img_size * img_size
+        X_tensor = record.reshape([1, -1])
+        idx_to_modify = torch.randint(low=0, high=total_num-1, size=(k,))
+        gen = torch.rand(size=(k,))
+        X_tensor[0, idx_to_modify] = gen
+        X_tensor = X_tensor.reshape([trainset_size, in_channels, img_size, img_size])
+
+    return X_tensor
+
+
+def gen_class_tensor(trainset_size, fix_class):
+    """
+    It is a function to generate fixed class tensor.
+    :param fix_class: fixed class. For cifar-10, class from (0-9)
+    :return: generate y tensor
+    """
+    y_tensor = torch.full(size=(trainset_size,), fill_value=fix_class)
+    return y_tensor
