@@ -133,7 +133,7 @@ def test(net, test_loader, test_dataset, criterion, device):
           .format(avg_loss, 100 * total_correct / len(test_dataset)))
 
 
-def nn_predict_proba(net, test_loader, device):
+def nn_predict_proba(net, test_loader, device, fix_class):
     """
     It is a function to calculate probability.
     :param net: neural network model
@@ -147,6 +147,26 @@ def nn_predict_proba(net, test_loader, device):
         labels = labels.to(device)
 
         output = net(images)
-        probability, pred = torch.max(output.data, dim=1)
+        sm = torch.nn.Softmax(dim=1)
+        probabilities = sm(output)
+        y_c = probabilities.data[0, fix_class - 1].item()
 
-    return probability
+        return y_c
+
+
+def nn_predict(net, test_loader, device):
+    """
+    It is a function to predict label.
+    :param net: neural network model
+    :param test_loader: test data loader
+    :param device: device (cpu or cuda)
+    :return: prediction label
+    """
+    net.eval()
+    for i, (images, labels) in enumerate(test_loader):
+        images = images.to(device)
+        labels = labels.to(device)
+
+        output = net(images)
+
+    return output.data
