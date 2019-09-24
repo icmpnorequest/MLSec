@@ -412,8 +412,11 @@ def main():
     print("X_tensor.size() = ", X_tensor.size())
     print("y_c = ", y_c)
 
+    # 3. Check shadowset directory to save shadow model training set and testing set
+    if not os.path.exists(shadowset_path):
+        os.mkdir(shadowset_path)
 
-    # 3. Get shadow model training set and testing set
+    # 4. Get shadow model training set and testing set
     for cls in range(num_labels - 1):
         # shadow_training_set class label from 0-8
         shadow_training_set = shadow_dataset(trainset_size=args.trainset_size,
@@ -469,7 +472,6 @@ def main():
                                                              train_proba_list=train_proba_list,
                                                              test_labels_list=test_labels_list,
                                                              test_proba_list=test_proba_list)
-
     # 2. For attack_array
     attack_array = np.vstack((attack_in_array, attack_out_array))
     assert attack_in_array.shape[1] == attack_out_array.shape[1] == attack_array.shape[1]
@@ -480,7 +482,7 @@ def main():
     # 3. Split into k partitions with each label
     split_label_list = split_attackset_by_label(attack_array=attack_array,
                                                 num_labels=num_labels)
-    # Be aware: the length of item in split_label_list is not the same!
+    # !Be aware: the length of item in split_label_list is not the same!
 
     # 4. Train k attack models
     rf = RandomForestClassifier(n_estimators=100)   # Create a RandomForest Classifier
