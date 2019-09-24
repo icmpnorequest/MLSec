@@ -283,7 +283,7 @@ def gen_class_tensor(trainset_size, fix_class):
     :param fix_class: fixed class. For cifar-10, class from (0-9)
     :return: generate y tensor
     """
-    y_tensor = torch.full(size=(trainset_size,), fill_value=fix_class)
+    y_tensor = torch.full(size=(trainset_size,), fill_value=fix_class).long()
     return y_tensor
 
 
@@ -323,3 +323,57 @@ def gen_shadow_trainset(path, each_trainset_size, num_labels):
     all_synthetic_dataloader = DataLoader(dataset=all_synthetic_dataset)
 
     return all_synthetic_dataset, all_synthetic_dataloader
+
+
+def split_attackset_by_labels_recorder():
+    """
+    It is a recorder to record results
+    """
+    """
+    label =  0
+    len(temp) =  289
+    
+    label =  1
+    len(temp) =  259
+    
+    label =  2
+    len(temp) =  277
+    
+    label =  3
+    len(temp) =  341
+    
+    label =  4
+    len(temp) =  287
+    
+    label =  5
+    len(temp) =  273
+    
+    label =  6
+    len(temp) =  230
+    
+    label =  7
+    len(temp) =  262
+    
+    label =  8
+    len(temp) =  277
+    
+    label =  9
+    len(temp) =  255
+    """
+
+
+def count_in_ndarray(ndarray):
+    """
+    It is a function to count every item in ndarray
+    :param ndarray: ndarray
+    :return: count number
+    """
+    count_dict = {}
+    for key in np.unique(ndarray):
+        print("key = ", key)
+        value = len(ndarray[np.where(ndarray == key)])
+        print("value = ", value)
+        print("\n")
+        count_dict[key] = value
+
+    return count_dict
