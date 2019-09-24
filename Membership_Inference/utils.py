@@ -325,43 +325,6 @@ def gen_shadow_trainset(path, each_trainset_size, num_labels):
     return all_synthetic_dataset, all_synthetic_dataloader
 
 
-def split_attackset_by_labels_recorder():
-    """
-    It is a recorder to record results
-    """
-    """
-    label =  0
-    len(temp) =  289
-    
-    label =  1
-    len(temp) =  259
-    
-    label =  2
-    len(temp) =  277
-    
-    label =  3
-    len(temp) =  341
-    
-    label =  4
-    len(temp) =  287
-    
-    label =  5
-    len(temp) =  273
-    
-    label =  6
-    len(temp) =  230
-    
-    label =  7
-    len(temp) =  262
-    
-    label =  8
-    len(temp) =  277
-    
-    label =  9
-    len(temp) =  255
-    """
-
-
 def count_in_ndarray(ndarray):
     """
     It is a function to count every item in ndarray
@@ -370,10 +333,76 @@ def count_in_ndarray(ndarray):
     """
     count_dict = {}
     for key in np.unique(ndarray):
-        print("key = ", key)
         value = len(ndarray[np.where(ndarray == key)])
-        print("value = ", value)
-        print("\n")
         count_dict[key] = value
 
     return count_dict
+
+
+def nn_result_recorder():
+    """
+    It is a function to record nn results.
+    """
+    """
+    Labels count in attackset =  {0.0: 335, 1.0: 298, 2.0: 275, 3.0: 338, 4.0: 264, 5.0: 264, 6.0: 248, 7.0: 208, 8.0: 334, 9.0: 186}
+    Class label = 0.0
+    Membership Inference precision score: 0.9253731343283582
+    Mermbership Inference recall score: 1.0
+    Membership Inference F1 score: 0.9612403100775194
+    ########################
+    
+    Class label = 1.0
+    Membership Inference precision score: 0.8666666666666667
+    Mermbership Inference recall score: 1.0
+    Membership Inference F1 score: 0.9285714285714286
+    ########################
+    
+    Class label = 2.0
+    Membership Inference precision score: 0.8727272727272727
+    Mermbership Inference recall score: 1.0
+    Membership Inference F1 score: 0.9320388349514563
+    ########################
+    
+    Class label = 3.0
+    Membership Inference precision score: 0.9117647058823529
+    Mermbership Inference recall score: 1.0
+    Membership Inference F1 score: 0.9538461538461539
+    ########################
+    
+    Class label = 4.0
+    Membership Inference precision score: 0.9245283018867925
+    Mermbership Inference recall score: 1.0
+    Membership Inference F1 score: 0.9607843137254902
+    ########################
+    
+    Class label = 5.0
+    Membership Inference precision score: 0.9245283018867925
+    Mermbership Inference recall score: 1.0
+    Membership Inference F1 score: 0.9607843137254902
+    ########################
+    
+    Class label = 6.0
+    Membership Inference precision score: 0.92
+    Mermbership Inference recall score: 1.0
+    Membership Inference F1 score: 0.9583333333333334
+    ########################
+    
+    Class label = 7.0
+    Membership Inference precision score: 0.9047619047619048
+    Mermbership Inference recall score: 1.0
+    Membership Inference F1 score: 0.9500000000000001
+    ########################
+    
+    Class label = 8.0
+    Membership Inference precision score: 0.8805970149253731
+    Mermbership Inference recall score: 1.0
+    Membership Inference F1 score: 0.9365079365079364
+    ########################
+    
+    Class label = 9.0
+    Membership Inference precision score: 0.868421052631579
+    Mermbership Inference recall score: 1.0
+    Membership Inference F1 score: 0.9295774647887324
+    ########################
+    """
+    pass
