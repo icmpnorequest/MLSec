@@ -27,14 +27,23 @@ It aims to implement `Shadow model technique` in paper.
 
 It aims to implement `Membership Inference Attack` according to paper.
 
+- Experiment_CIFAR10.py
 
-#### Limitation
+It aims to implement CIFAR-10 experiment in paper.
 
-- I have only implemented `Membership Inference Attack` with classifier `RandomForest` in Python3 package `sklearn`. In the future, I will add various classifiers, like `Neural Network` and so on.
+- nn_model.py
 
-- In my code, I just implement the experiments. However, the code should be wrapped in a `class` for reusing. 
+It completes the neural network code using Pytorch.
 
-<br> </br>
+- utils.py
+
+It completes the utils code.
+
+\# Please notice: the norm_all_batch_data.npy under the directory `Membership_Inference/cifar10/norm_all_batch_data.npy`
+is too large to upload.
+
+I uploaded it to the link: https://pan.baidu.com/s/1uZaZhVYUiRXi3resfuJoiA
+
 
 ## Reference
 ### 1. Paper
