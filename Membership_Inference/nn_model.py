@@ -82,6 +82,7 @@ def train(net, train_loader, num_epochs, criterion, optimizer, device):
     :param optimizer: optimizer
     :param device: device (cuda or cpu)
     """
+    print("########## Train ##########")
     total_step = len(train_loader)
     for epoch in range(num_epochs):
         net.train()
@@ -98,10 +99,9 @@ def train(net, train_loader, num_epochs, criterion, optimizer, device):
             loss.backward()
             optimizer.step()
 
-            if (i + 1) % 10 == 0:
+            if (i + 1) % 5 == 0:
                 print("Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}"
                       .format(epoch + 1, num_epochs, i + 1, total_step, loss.item()))
-    print("\n")
 
 
 def test(net, test_loader, test_dataset, criterion, device):
@@ -113,6 +113,7 @@ def test(net, test_loader, test_dataset, criterion, device):
     :param criterion: loss function
     :param device: device (cpu or cuda)
     """
+    print("########## Test ##########")
     net.eval()
     total_correct = 0
     avg_loss = 0.0
@@ -129,7 +130,7 @@ def test(net, test_loader, test_dataset, criterion, device):
         total_correct += (pred == labels).sum().item()
 
     avg_loss = avg_loss / len(test_dataset)
-    print("Test Avg. Loss: {}, Accuracy: {}%"
+    print("Test Avg. Loss: {}, Accuracy: {}%\n"
           .format(avg_loss, 100 * total_correct / len(test_dataset)))
 
 
@@ -170,3 +171,24 @@ def nn_predict(net, test_loader, device):
         output = net(images)
 
     return output.data
+
+
+def get_predict_proba(net, loader, device):
+    """
+    It is a function to get prediction probability.
+    :param net: net
+    :param loader: DataLoader
+    :param device: device
+    :return: probability of all classes
+    """
+    net.eval()
+    for i, (images, labels) in enumerate(loader):
+        images = images.to(device)
+        labels = labels.to(device)
+
+        output = net(images)
+        sm = torch.nn.Softmax(dim=1)
+        probabilities = sm(output)
+        y_c = probabilities.data[0]
+
+        return y_c
